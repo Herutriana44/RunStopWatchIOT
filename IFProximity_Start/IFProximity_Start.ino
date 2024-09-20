@@ -1,5 +1,7 @@
 #include <WiFi.h>
-#include <FirebaseESP32.h>
+#include <ESP32Firebase.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
 
 // Konfigurasi WiFi
 #define WIFI_SSID "HERU TRIANA X250"
@@ -8,18 +10,18 @@
 #define INTERNAL_LED 2
 
 // Konfigurasi Firebase
-#define FIREBASE_HOST "https://runningstopwatch-default-rtdb.asia-southeast1.firebasedatabase.app/"
-#define FIREBASE_AUTH ""
+#define REFERENCE_URL "https://runningstopwatch-default-rtdb.asia-southeast1.firebasedatabase.app/"
+#define FIREBASE_AUTH "AIzaSyBf4pnbvP_XMgu7edV6zw-cyEzRqC5l1_I"
 #define FIREBASE_DB_SECRET "35go3AJ3TO1Ke6oMvs0fm6NmkVRpE6uqEFjGZmPE"
-
+Firebase firebase(REFERENCE_URL);
 // Pin untuk sensor inframerah
 const int buttonPin = 26;
 int buttonState = 0;
 
 // Buat objek Firebase
-FirebaseData fbdo;
-FirebaseAuth auth;
-FirebaseConfig config;
+// FirebaseData fbdo;
+// FirebaseAuth auth;
+// FirebaseConfig config;
 
 void setup() {
   Serial.begin(9600);
@@ -33,12 +35,12 @@ void setup() {
   Serial.print("Connected with IP: ");
   Serial.println(WiFi.localIP());
 
-  // // Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH, FIREBASE_DB_SECRET);
-  config.database_url = FIREBASE_HOST;
-  config.api_key = FIREBASE_AUTH;
-  Firebase.begin(&config, &auth);
-  // Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-  Firebase.reconnectWiFi(true);
+  // // firebase.begin(FIREBASE_HOST, FIREBASE_AUTH, FIREBASE_DB_SECRET);
+  // config.database_url = DATABASE_URL;
+  // config.api_key = FIREBASE_AUTH;
+  // firebase.begin(&config, &auth);
+  // firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+  // firebase.reconnectWiFi(true);
 
   pinMode(buttonPin, INPUT);
   pinMode(INTERNAL_LED,OUTPUT);
@@ -54,12 +56,12 @@ void loop() {
     digitalWrite(INTERNAL_LED,HIGH);
     
     // Kirim data ke Firebase
-    // Firebase.setJSON(fbdo, "/data", "{\"start\":true, \"finish\":false}");
-    if (Firebase.setInt(fbdo, "start", 1)) {
+    // firebase.setJSON(fbdo, "/data", "{\"start\":true, \"finish\":false}");
+    if (firebase.setInt("start", 1)) {
       Serial.println("Set successful");
     } else {
       Serial.println("Set failed");
-      Serial.println(fbdo.errorReason());
+      // Serial.println(fbdo.errorReason());
     }
 
     // // Delay 3 detik
@@ -67,11 +69,11 @@ void loop() {
   } else {
     Serial.println("Objek tidak terdeteksi!");
     digitalWrite(INTERNAL_LED,LOW);
-    if (Firebase.setInt(fbdo, "start", 0)) {
+    if (firebase.setInt("start", 0)) {
       Serial.println("Set successful");
     } else {
       Serial.println("Set failed");
-      Serial.println(fbdo.errorReason());
+      // Serial.println(fbdo.errorReason());
     }
   }
 }
