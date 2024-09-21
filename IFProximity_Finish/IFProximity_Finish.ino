@@ -69,11 +69,11 @@ void loop() {
   } else {
     Serial.println("Objek tidak terdeteksi!");
     digitalWrite(INTERNAL_LED,LOW);
-    if (firebase.setInt("start", 0)) {
-      Serial.println("Set successful");
-    } else {
-      Serial.println("Set failed");
+    //if (firebase.setInt("start", 0)) {
+    //  Serial.println("Set successful");
+   // } else {
+    //  Serial.println("Set failed");
       // Serial.println(fbdo.errorReason());
-    }
+   // }
   }
 }
