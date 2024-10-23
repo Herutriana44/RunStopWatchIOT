@@ -60,17 +60,23 @@ void setup() {
     // Serial.println("Bluetooth Started!");
     // digitalWrite(buzzer, HIGH);
     
-    lcd.setCursor(0, 0); 
-    lcd.print("    *ESP32    ");
-    lcd.setCursor(0, 1); 
-    lcd.print("   *StopWatch   ");
     
     // Koneksi ke Wi-Fi
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     while (WiFi.status() != WL_CONNECTED) {
         delay(1000);
         Serial.println("Menghubungkan ke Wi-Fi...");
+
+        lcd.setCursor(0, 0); 
+    lcd.print("Menghubungkan");
+    lcd.setCursor(0, 1); 
+    lcd.print("ke Wi-Fi...");
     }
+
+    lcd.setCursor(0, 0); 
+    lcd.print("    *ESP32    ");
+    lcd.setCursor(0, 1); 
+    lcd.print("   *StopWatch   ");
     Serial.println("Terhubung ke Wi-Fi");
 }
 
@@ -184,15 +190,15 @@ if ((millis() - lastButton) > delayAntiBouncing){
       digitalWrite(buzzer, LOW);  // Aktifkan buzzer
     delay(300);  // Tunda untuk memastikan pengguna melihat pesan
     digitalWrite(buzzer, HIGH); 
-        // delay(200);  // Debounce untuk tombol
-        // if (digitalRead(resetButton) == LOW) {
-        //     resetFirebaseValues();  // Set nilai start dan finish menjadi 0 di Firebase
-        //     lcd.clear();
-        //     lcd.setCursor(0, 0);
-        //     lcd.print("System Restart ");
-        //     delay(2000);  // Tampilkan pesan reset di LCD
-        //     ESP.restart();  // Melakukan restart pada ESP32
-        // }
+        delay(200);  // Debounce untuk tombol
+        if (digitalRead(resetButton) == LOW) {
+            resetFirebaseValues();  // Set nilai start dan finish menjadi 0 di Firebase
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("System Restart ");
+            delay(2000);  // Tampilkan pesan reset di LCD
+            ESP.restart();  // Melakukan restart pada ESP32
+        }
     }
 }
 
