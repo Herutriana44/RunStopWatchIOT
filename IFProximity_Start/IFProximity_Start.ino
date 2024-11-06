@@ -3,9 +3,10 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
-// Konfigurasi WiFi
-#define WIFI_SSID "HERU TRIANA X250"
-#define WIFI_PASSWORD "heru1234"
+// Konfigurasi WiFi - Tambahkan beberapa SSID dan Password ke array
+const char* ssidList[] = {"KOSAN IBU NUR", "Ruang Aslab", "HERU TRIANA X250"};
+const char* passwordList[] = {"sikembar", "labkom2023", "heru1234"};
+const int wifiCount = sizeof(ssidList) / sizeof(ssidList[0]);  // Total jumlah jaringan Wi-Fi
 
 #define INTERNAL_LED 2
 
@@ -14,66 +15,67 @@
 #define FIREBASE_AUTH "AIzaSyBf4pnbvP_XMgu7edV6zw-cyEzRqC5l1_I"
 #define FIREBASE_DB_SECRET "35go3AJ3TO1Ke6oMvs0fm6NmkVRpE6uqEFjGZmPE"
 Firebase firebase(REFERENCE_URL);
+
 // Pin untuk sensor inframerah
 const int buttonPin = 26;
 int buttonState = 0;
 
-// Buat objek Firebase
-// FirebaseData fbdo;
-// FirebaseAuth auth;
-// FirebaseConfig config;
-
 void setup() {
   Serial.begin(9600);
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("Connecting to Wi-Fi");
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
-    delay(500);
-  }
-  Serial.println();
-  Serial.print("Connected with IP: ");
-  Serial.println(WiFi.localIP());
 
-  // // firebase.begin(FIREBASE_HOST, FIREBASE_AUTH, FIREBASE_DB_SECRET);
-  // config.database_url = DATABASE_URL;
-  // config.api_key = FIREBASE_AUTH;
-  // firebase.begin(&config, &auth);
-  // firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-  // firebase.reconnectWiFi(true);
+  // Coba sambungkan ke Wi-Fi dari daftar
+  bool connected = false;
+  for (int i = 0; i < wifiCount; i++) {
+    Serial.print("Connecting to Wi-Fi: ");
+    Serial.println(ssidList[i]);
+    WiFi.begin(ssidList[i], passwordList[i]);
+    
+    // Tunggu hingga terhubung atau timeout
+    int attempts = 0;
+    while (WiFi.status() != WL_CONNECTED && attempts < 20) {  // 20 * 500ms = 10 detik untuk setiap Wi-Fi
+      Serial.print(".");
+      delay(500);
+      attempts++;
+    }
+    
+    if (WiFi.status() == WL_CONNECTED) {
+      connected = true;
+      Serial.println();
+      Serial.print("Connected to Wi-Fi with IP: ");
+      Serial.println(WiFi.localIP());
+      break;  // Keluar dari loop jika terhubung
+    } else {
+      Serial.println("\nFailed to connect. Trying next network...");
+    }
+  }
+
+  if (!connected) {
+    Serial.println("Failed to connect to any Wi-Fi network.");
+    while (true);  // Berhenti jika tidak dapat terhubung ke jaringan mana pun
+  }
 
   pinMode(buttonPin, INPUT);
-  pinMode(INTERNAL_LED,OUTPUT);
   Serial.println("Program dimulai");
 }
 
 void loop() {
   buttonState = digitalRead(buttonPin);
-  // Baca nilai sensor inframerah (Anda perlu menyesuaikan fungsi ini sesuai dengan sensor Anda)
-  // Misalnya, jika nilai analog lebih besar dari nilai ambang batas, berarti ada objek
+
   if (buttonState == HIGH) {
     Serial.println("Objek terdeteksi!");
-    digitalWrite(INTERNAL_LED,HIGH);
     
     // Kirim data ke Firebase
-    // firebase.setJSON(fbdo, "/data", "{\"start\":true, \"finish\":false}");
     if (firebase.setInt("start", 1)) {
+       digitalWrite(INTERNAL_LED,HIGH);
       Serial.println("Set successful");
     } else {
       Serial.println("Set failed");
-      // Serial.println(fbdo.errorReason());
     }
 
-    // // Delay 3 detik
-    // delay(1000);
+    // Delay 1 detik
+    delay(1000);
   } else {
     Serial.println("Objek tidak terdeteksi!");
     digitalWrite(INTERNAL_LED,LOW);
-    // if (firebase.setInt("start", 0)) {
-    //  Serial.println("Set successful");
-   // } else {
-    //  Serial.println("Set failed");
-      // Serial.println(fbdo.errorReason());
-   // }
   }
 }
