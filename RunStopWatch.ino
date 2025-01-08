@@ -30,8 +30,8 @@ const int wifiCount = sizeof(ssidList) / sizeof(ssidList[0]);
 #define INTERNAL_LED 2
 
 // Konfigurasi Firebase
-#define REFERENCE_URL "https://runningstopwatch-default-rtdb.asia-southeast1.firebasedatabase.app/"
-#define FIREBASE_AUTH "35go3AJ3TO1Ke6oMvs0fm6NmkVRpE6uqEFjGZmPE"
+#define REFERENCE_URL ""
+#define FIREBASE_AUTH ""
 
 struct TimerData {
   int start;
