@@ -11,9 +11,9 @@ const int wifiCount = sizeof(ssidList) / sizeof(ssidList[0]);  // Total jumlah j
 #define INTERNAL_LED 2
 
 // Konfigurasi Firebase
-#define REFERENCE_URL "https://runningstopwatch-default-rtdb.asia-southeast1.firebasedatabase.app/"
-#define FIREBASE_AUTH "AIzaSyBf4pnbvP_XMgu7edV6zw-cyEzRqC5l1_I"
-#define FIREBASE_DB_SECRET "35go3AJ3TO1Ke6oMvs0fm6NmkVRpE6uqEFjGZmPE"
+#define REFERENCE_URL ""
+#define FIREBASE_AUTH ""
+#define FIREBASE_DB_SECRET ""
 Firebase firebase(REFERENCE_URL);
 
 // Pin untuk sensor inframerah
