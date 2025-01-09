@@ -42,9 +42,9 @@ class _StopwatchPageState extends State<StopwatchPage> {
 
   Future<void> _startListeningToFirebase() async {
     const String startUrl =
-        '';
+        'https://runningstopwatch-default-rtdb.asia-southeast1.firebasedatabase.app/start.json?auth=35go3AJ3TO1Ke6oMvs0fm6NmkVRpE6uqEFjGZmPE';
     const String finishUrl =
-        '';
+        'https://runningstopwatch-default-rtdb.asia-southeast1.firebasedatabase.app/finish.json?auth=35go3AJ3TO1Ke6oMvs0fm6NmkVRpE6uqEFjGZmPE';
 
     while (true) {
       try {
@@ -75,8 +75,8 @@ class _StopwatchPageState extends State<StopwatchPage> {
 
   Future<void> _resetStopwatch() async {
     const String baseUrl =
-        '';
-    const String authQuery = '';
+        'https://runningstopwatch-default-rtdb.asia-southeast1.firebasedatabase.app/';
+    const String authQuery = '?auth=35go3AJ3TO1Ke6oMvs0fm6NmkVRpE6uqEFjGZmPE';
 
     _stopwatch.reset();
     _timer?.cancel();
