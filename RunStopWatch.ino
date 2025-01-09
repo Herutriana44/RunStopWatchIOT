@@ -16,7 +16,7 @@ long delayAntiBouncing = 50;
 long dataPaus = 0;
 const int InfraredStar = 3;
 const int InfraredStop = 4;
-int buzzer = 27;
+int buzzer = 26;
 int star;
 int flag = 0;
 int resetButton = 25;
@@ -30,8 +30,8 @@ const int wifiCount = sizeof(ssidList) / sizeof(ssidList[0]);
 #define INTERNAL_LED 2
 
 // Konfigurasi Firebase
-#define REFERENCE_URL ""
-#define FIREBASE_AUTH ""
+#define REFERENCE_URL "https://runningstopwatch-default-rtdb.asia-southeast1.firebasedatabase.app/"
+#define FIREBASE_AUTH "35go3AJ3TO1Ke6oMvs0fm6NmkVRpE6uqEFjGZmPE"
 
 struct TimerData {
   int start;
